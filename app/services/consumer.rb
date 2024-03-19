@@ -7,8 +7,9 @@ class Consumer
     @connection.start
     channel = @connection.create_channel
     queue = channel.queue(queue_name)
-    exchange = channel.fanout(queue_name)
-    queue.bind(exchange)
+    # exchange = channel.fanout(queue_name)
+    exchange = channel.direct("direct_exchange")
+    queue.bind(exchange, routing_key: "direct_route")
     begin
       puts '[x x] waiting for message'
       queue.subscribe do |delivery_info, _properties, body|
