@@ -3,10 +3,8 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    consumer = Consumer.new
-    message =  consumer.consume('hello')
+    Consumer.consume("hello")
     @posts = Post.all
-    puts "post controller  #{message}"
   end
 
   # GET /posts/1 or /posts/1.json
