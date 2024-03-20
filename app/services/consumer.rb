@@ -9,20 +9,21 @@ class Consumer
         puts '[x x] waiting for message'
         queue.subscribe manual_ack: true do |delivery_info, _properties, body|
           puts "[x] received #{body}"
+          body = JSON.parse!(body)
+          Post.create!(body)
           channel.ack(delivery_info.delivery_tag )
         end
       rescue Interrupt => _
         @connection.close
       end
-      end
+    end
 
       def channel
         @channel ||= connection.create_channel
       end
 
       def connection
-        @connection ||= Bunny.new
-        @connection.start
+        @connection ||= Bunny.new.start
       end
     end
 
